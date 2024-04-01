@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery_app/components/my_button.dart';
 import 'package:food_delivery_app/components/my_textfield.dart';
+import 'package:food_delivery_app/services/auth/auth_service.dart';
 
 class RegisterPage extends StatefulWidget {
   final void Function()? onTap;
@@ -22,6 +23,52 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController passwordController = TextEditingController();
 
   final TextEditingController confirmPasswordController = TextEditingController();
+
+
+  //register method
+  void register() async{
+    
+    //get auth service
+    final _authService = AuthService();
+
+    //check if passwords match -> create user
+    if(passwordController.text == confirmPasswordController.text){
+      //try creating user
+      try{
+        await _authService.signUpWithEmailPassword(
+          emailController.text, passwordController.text);
+      }
+
+      //display any errors
+      catch(e){
+        showDialog(
+          context: context, 
+          builder: (context) => AlertDialog(
+            title: Text(e.toString()),
+          ),
+          );
+      }
+    }
+
+    //if passwords don't match -> show error
+    else{
+      showDialog(
+        context: context, 
+        builder: (context) => AlertDialog(
+          title: Text("Passwords don't match!"),
+        ),
+        );
+    }
+
+
+    // showDialog(
+    //   context: context, 
+    //   builder: (context) => AlertDialog(
+    //     backgroundColor: Theme.of(context).colorScheme.background,
+    //     title: Text("User wants to register"),
+    //   ),
+    //   );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +124,7 @@ class _RegisterPageState extends State<RegisterPage> {
         
             //sign up button
             MyButton(
-              ontap: (){}, 
+              ontap: register, 
               text: "Sign up"
               ),
               const SizedBox(height: 25),
