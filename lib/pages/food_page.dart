@@ -13,12 +13,11 @@ class FoodPage extends StatefulWidget {
     super.key,
     required this.food,
     }){
-      // Initialize selected addons with unique keys to be false
-    selectedAddons = Map.fromIterable(
-    food.availableAddons,
-    key: (addon) => addon, // Use addon itself as the key
-    value: (_) => false,   // Initialize all values to false
-  );
+      // Initialize selected addons to be false
+      for(Addon addon in food.availableAddons){
+        selectedAddons[addon] = false;
+      }
+  
     }
 
   @override
@@ -36,10 +35,14 @@ class _FoodPageState extends State<FoodPage> {
     //format the selected addons
     List<Addon> currentlySelectedAddons = [];
     for(Addon addon in widget.food.availableAddons){
-      if (widget.selectedAddons[addon] = true){
+      if (widget.selectedAddons[addon] == true){
         currentlySelectedAddons.add(addon);
       }
     }
+    // for(Addon addon in currentlySelectedAddons){
+    //   print("currently selected addons");
+    //   print(addon.name);
+    // }
 
     //add to cart
     context.read<Restaurent>().addToCart(food, currentlySelectedAddons);
@@ -141,6 +144,8 @@ class _FoodPageState extends State<FoodPage> {
                       onChanged: (bool? value) {
                         setState(() {
                           widget.selectedAddons[addon] = value!;
+                          print(widget.food.name);
+                          print(widget.selectedAddons[addon]);
                         });
                       },
                       );
