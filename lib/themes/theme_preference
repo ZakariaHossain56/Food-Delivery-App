@@ -1,0 +1,13 @@
+import 'package:hive/hive.dart';
+
+class ThemePreference {
+  static const String boxName = 'theme_preference';
+
+  static const String darkModeKey = 'dark_mode';
+
+  Future<void> init() async {
+    await Hive.openBox<bool>(boxName);
+  }
+
+  Box<bool> getBox() => Hive.box<bool>(boxName);
+}
